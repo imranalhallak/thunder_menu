@@ -22,7 +22,14 @@ class User extends Authenticatable
         'email',
         'password',
     ];
-
+    public function branches()
+    {
+        return $this->hasMany(Branch::class);
+    }
+    public function defaultBranch()
+{
+    return $this->belongsTo(Branch::class, 'default_branch');
+}
     /**
      * The attributes that should be hidden for serialization.
      *
