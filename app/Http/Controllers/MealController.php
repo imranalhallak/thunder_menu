@@ -206,8 +206,8 @@ class MealController extends Controller
         $product->save();
 
         // Return a response (adjust as needed for your frontend)
-        return redirect()->back()->with('success', 'Images ordered successfully!');
-    }
+        return redirect()->route('meals.edit', ['id' => $id])
+        ->with('success', 'Images ordered successfully!');    }
 
 
     // Helper method to handle image uploads

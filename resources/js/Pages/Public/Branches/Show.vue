@@ -5,8 +5,8 @@
       <div class="flex justify-center">
         <div class="bg-black max-w-[600px]">
           <img
-            src="branch_images/Unti1tled.png"
-            alt="Restaurant front view at night with bright lights"
+          :src="branch.image"
+          alt="Restaurant front view at night with bright lights"
             class="w-full max-w-[600px] rounded-lg"
           />
         </div>
@@ -25,10 +25,9 @@
         <!-- Branch Information -->
         <div class="mt-2 text-white">
           <p>
-            VİRANŞEHİR MAH/SEMT 34330 SK.<br />
-            NO: 1 B İÇ KAPI NO: 25 MEZİTLİ/ MERSİN<br />
-            {{ branch.phone || '+905011221122' }}<br />
-            Wifi: Friends4321
+            {{branch.address1 || ""}}<br />
+            {{branch.address2 || ""}}<br />
+            {{ branch.phone || "" }}<br />
           </p>
         </div>
 

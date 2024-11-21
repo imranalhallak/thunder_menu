@@ -61,7 +61,7 @@ Route::middleware('auth')->group(function () {
         Route::post('/', [BranchController::class, 'store'])->name('branches.store'); // Create a new menu
         Route::get('{id}', [BranchController::class, 'show'])->name('branches.show'); // Display a specific menu
         Route::get('{id}/edit', [BranchController::class, 'edit'])->name('branches.edit'); // Display form to edit a menu
-        Route::post('/{id}', [BranchController::class, 'update'])->name('branches.update'); // Update a menu
+        Route::post('/u/{id}', [BranchController::class, 'update'])->name('branches.update'); // Update a menu
         Route::delete('{id}', [BranchController::class, 'destroy'])->name('branches.destroy'); // Delete a menu
     });
 

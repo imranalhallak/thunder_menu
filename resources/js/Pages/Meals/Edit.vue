@@ -46,12 +46,17 @@ const handleFileChange = async (event) => {
   form.images = Array.from(event.target.files); // Store all selected files
 
   // Submit the form and wait for the response
-  await form.post(route("meals.update", { id: meal.id }), {
+  await form.post(route("meals.update", { id: meal.id,
+
+    preserveScroll: true,
+            preserveState: true,
+
+            replace: true,
+   }), {
     onSuccess: () => {
       if (imagesInput.value) {
         imagesInput.value.value = ''; // Reset the file input value
       }
-      window.location.reload(); // Reload the page after successful form submission
     }
   });
 };
@@ -71,7 +76,13 @@ const updateMeal = async () => {
   });
 
   // Send the form data
-  await form.post(route("meals.update", { id: meal.id }), {
+  await form.post(route("meals.update", { id: meal.id ,
+    preserveScroll: true,
+            preserveState: true,
+
+            replace: true,
+  }), {
+
     forceFormData: true, // Ensure FormData is used for the request
     onSuccess: () => {
       // Reload the page or update the images after successful upload
@@ -80,7 +91,6 @@ const updateMeal = async () => {
 
   });
 
-  window.location.reload(); // Reload the page after successful form submission
 };
 
 // Dynamic input class based on error presence
@@ -109,10 +119,24 @@ const deleteImage = (index) => {
 };
 
 // Handle reorder event
-const handleReorder = () => {
-  form.images = [...mealImages1.value]; // Update form images with the reordered list
-  form.post(route("meals.order-image", { id: meal.id }));
+const handleReorder = async () => {
+
+
+
+    // Update form images with the reordered list
+    form.images = [...mealImages1.value];
+
+    // Submit the form
+    await form.post(route("meals.order-image", {
+      id: meal.id,
+    }), {
+      preserveScroll: true, // Ensure Inertia does not trigger scroll
+      preserveState: true,
+      replace: true,
+    });
+
 };
+
 </script>
 
 <template>

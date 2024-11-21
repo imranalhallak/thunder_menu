@@ -33,11 +33,8 @@ const form = useForm({
 
 // Function to handle form submission (create or update)
 const submitBranch = () => {
-    if (props.branch) {
-        form.post(route("branches.update", props.branch.id)); // Use a specific update route for editing
-    } else {
-        form.post(route("branches.store")); // Default to creating a new branch
-    }
+        form.post(route("branches.update", {id:props.branch.id})); // Use a specific update route for editing
+
 };
 
 const handleLogoUpload = (event) => {
@@ -47,13 +44,7 @@ const handleLogoUpload = (event) => {
 
 const handleImageUpload = (event) => {
     const file = event.target.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            form.image = e.target.result; // Set the uploaded image as the source for the form
-        };
-        reader.readAsDataURL(file);
-    }
+    form.image = file; // This binds the file to the form's image field
 };
 </script>
 

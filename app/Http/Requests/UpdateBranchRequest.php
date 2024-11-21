@@ -11,7 +11,7 @@ class UpdateBranchRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -28,8 +28,6 @@ class UpdateBranchRequest extends FormRequest
             'address1' => 'nullable|string|max:255',
             'address2' => 'nullable|string|max:255',
             'location' => 'nullable|string|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'mode' => 'nullable|string|max:50',
             'facebook' => 'nullable|url',
             'instagram' => 'nullable|url',

@@ -72,7 +72,18 @@ class BranchController extends Controller
 
         // Handle image upload if present
         if ($request->hasFile('image')) {
+            // Get the uploaded file
+            $image = $request->file('image');
+
+            // Generate a unique name for the image
+
+            // Define the path to the public folder
+            $destinationPath = public_path('branch_images'); // e.g., /public/uploads
             $path = $request->file('image')->store('branch_images', 'public');
+
+            // Move the file to the public/uploads folder
+            $image->move($destinationPath, $path);
+
             $branch->image = $path;  // Save the path to the image field
             $branch->save();
         }
@@ -98,7 +109,7 @@ class BranchController extends Controller
     {
 
 
-$branch = Branch::findOrFail($id);
+        $branch = Branch::findOrFail($id);
         return Inertia::render('Branches/Edit', [
             'branch' => $branch,
         ]); // 'null' by default if not set
@@ -107,9 +118,55 @@ $branch = Branch::findOrFail($id);
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBranchRequest $request, Branch $branch)
+    public function update(UpdateBranchRequest $request, $id)
     {
-        //
+        // Get validated data from the request
+        if (!$request->validated()) {
+            return redirect()->route('menus.index')
+                ->with('success', 'Branch updated successfully.');
+        }
+        $validatedData = $request->validated();
+        $branch = Branch::findOrFail($id);
+        // Check if the name has been updated to regenerate the slug
+        if ($validatedData['name'] !== $branch->name) {
+            $baseSlug = Str::slug($validatedData['name']);
+            $slug = $baseSlug;
+            $count = 1;
+
+            // Ensure the slug is unique by appending a number if necessary
+            while (Branch::where('slug', $slug)->where('id', '!=', $branch->id)->exists()) {
+                $slug = $baseSlug . '-' . $count;
+                $count++;
+            }
+            $validatedData['slug'] = $slug; // Assign the new slug to the validated data
+            $validatedData['user_id'] = auth()->user()->id; // Assign the new slug to the validated data
+        }
+
+        // Update the branch details
+        $branch->update($validatedData);
+
+        // Handle logo upload if present
+        if ($request->hasFile('logo')) {
+            $path = $request->file('logo')->store('branch_logos', 'public');
+            $branch->logo = $path;  // Save the path to the logo field
+            $branch->save();
+        }
+
+        // Handle image upload if present
+        if ($request->hasFile('image')) {
+            // Get the uploaded file
+            $image = $request->file('image');
+            // Generate a unique filename
+            $uniqueFilename = Str::random(40) . '.' . $image->getClientOriginalExtension();
+            // Move the file to the public/uploads folder
+            $path =   $image->move('branch_images', $uniqueFilename);
+            $branch->image = $path;
+            $branch->save();
+        }
+
+        // Redirect back with a success message
+        return redirect()->route('menus.index')
+            ->with('success', 'Branch updated successfully.');
     }
 
     /**
